@@ -17,7 +17,7 @@ var request = require('request');
 
 var name = [];
 //this is a list of acceptance numbers in anonymous
-var acceptanceNumber = [];
+var solvedProblem = [];
 
 name.push('fguy'); // PL Taehoon Kim
 name.push('ethkim'); // PL DH Kim
@@ -31,7 +31,14 @@ for (var i = name.length - 1; i >= 0; i--) {
   request('https://leetcode.com/'+name[i]+'/', function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var c = cheerio.load(body);
-      acceptanceNumber.push(parseInt(c('.badge').eq(1).text().trim()));
+      //solved problem
+      //c('.badge').eq(0).text().trim()
+      //aceptence num
+      //c('.badge').eq(1).text().trim()
+      //acceptence rate
+      //c('.badge').eq(2).text().trim()
+      solvedProblem.push(parseInt(c('.badge').eq(0).text().trim()));
+      
     };
   });
 };
@@ -41,7 +48,7 @@ var io = require('socket.io').listen(app.listen(port));
 
 io.sockets.on('connection', function (socket) {
   socket.emit('message', {
-    msg: acceptanceNumber
+    msg: solvedProblem
   });
 });
 
